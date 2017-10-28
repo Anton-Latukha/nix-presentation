@@ -65,11 +65,14 @@ docker run -it ubuntu:16.04 /bin/bash
 
 Release version:
 
+
 ```
-echo $(tput setaf 2) "$(cat /etc/os-release | grep PRETTY_NAME | cut -d= -f2)" ; tput sgr0
+echo "$(tput setaf 2)$(grep PRETTY_NAME /etc/os-release | cut -d= -f2)$(tput sgr0)""Ubuntu 16.04.3 LTS"
 ```
 
 I've taken the most popular and polished Docker image - current Ubuntu LTS.
+
+##### Dependency
 
 ```
 apt update && apt -y install curl bzip2
@@ -79,7 +82,8 @@ chmod u+x ./install.sh
 ./install.sh
 ```
 
-#####
+
+##### User
 
 Error...
 
@@ -91,7 +95,8 @@ Describing. Solving
 export USER=root
 ```
 
-#####
+
+##### Sudo
 
 
 WARNING on root.
@@ -108,7 +113,12 @@ sudo not present.
 
 God damn. It is lightweight system. It is microcontroller in a plain. If su is barebone, has smallest attack surface, and all noninteractive features we need - probably adding a sudo of caurce is a plesent convinient present to our hacker. I know, he uses sudoless on our controllers.
 
-Describing. Solving
+```
+apt install sudo
+```
+
+
+##### Nixbld group and users
 
 ... Error...
 
@@ -122,7 +132,32 @@ So she decides to imagines a situation in which I am guilty that she was unable 
 
 You know that even Great Gutsby (Image of Gutsby Dicaprio throwing dresses) throwing dresses at Nix would not guess that Nix said that it does single user install and so no workers, but wants that NixBLD dress, with that colorfull worker nixbld# users everywhere.
 
+At start of script installation says: echo "performing a single-user installation of Nix..."
 
+```
+groupadd -r nixbld
+for n in $(seq 1 10); do useradd -c "Nix build user $n" \
+    -d /var/empty -g nixbld -G nixbld -M -N -r -s "$(which nologin)" \
+    nixbld$n; done
+```
+
+##### Shell profile
+
+Make both changes to shell initialization and current interactive shell.
+
+Only after this fix Nix installation can go into using Nix after install.
+
+### My updated version
+
+```
+docker run -it ubuntu:16.04 /bin/bash
+```
+
+```
+apt update && apt -y install git curl bzip2
+
+git clone -b installFullProgress https://github.com/Anton-Latukha/nix.git
+```
 
 Old notes.
 ### Irreplacability

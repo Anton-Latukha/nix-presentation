@@ -74,5 +74,5 @@ for n in "$(seq 1 10)"; do useradd -c "Nix build user nixbld$n" -d /var/empty -g
 \n\
 (c) Anton Latukha, Serokell 2017 \n\
 \n\
-Source directory: $PWD\n'\
+Source directory: \"$PWD\"\n'\
 > /etc/motd
